@@ -2,18 +2,20 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { ProductsPage } from '../pages/ProductsPage';
 
-test('Termék kosárba helyezése', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-  const productsPage = new ProductsPage(page);
+test.describe('Kosár funkciók', () => {
+  let productsPage: ProductsPage;
 
-  // 1. Bejelentkezés
-  await loginPage.goto();
-  await loginPage.login('standard_user', 'secret_sauce');
+  test.beforeEach(async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    productsPage = new ProductsPage(page);
 
-  // 2. Termék hozzáadása
-  await productsPage.addItemToCart('Sauce Labs Backpack');
+    await loginPage.goto();
+    await loginPage.login('standard_user', 'secret_sauce');
+  });
 
-  // 3. Ellenőrzés: Megjelent a 1-es szám a kosár ikonon?
-  const cartBadge = page.locator('.shopping_cart_badge');
-  await expect(cartBadge).toHaveText('1');
+  test('Termék kosárba helyezése', async ({ page }) => {
+    await productsPage.addItemToCart('Sauce Labs Backpack');
+    const cartBadge = page.locator('.shopping_cart_badge');
+    await expect(cartBadge).toHaveText('1');
+  });
 });
