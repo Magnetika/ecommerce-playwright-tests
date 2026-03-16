@@ -18,4 +18,11 @@ export class LoginPage {
   async goto() {
     await this.page.goto('https://www.saucedemo.com/');
   }
+
+  // Ez a metódus végzi el magát a bejelentkezést
+  async login(user: string, pass: string) {
+    await this.usernameInput.fill(user);
+    await this.passwordInput.fill(pass);
+    await this.loginButton.click();
+  }
 }
